@@ -34,8 +34,6 @@ namespace GrpcStreamer.Server.IoC
                 RegisterServices(services, configuration);
 
                 container = new Container(services, configuration);
-
-                //ApplyMigrations<GrpcStreamerDbContext>();
             }
 
             return container;
@@ -57,7 +55,6 @@ namespace GrpcStreamer.Server.IoC
             var connectionString = configuration.GetConnectionString("master");
 
             services.AddTransient<IConnectionFactory, ConnectionFactory>(c => new ConnectionFactory(connectionString));
-            //services.AddDbContext<GrpcStreamerDbContext>(options => options.UseSqlServer(connectionString), ServiceLifetime.Transient);
             services.AddTransient<IItemRepository, ItemRepository>();
             services.AddTransient<IItemService, ItemService>();
             services.AddTransient<IStreamerService, StreamerService>();
@@ -69,14 +66,5 @@ namespace GrpcStreamer.Server.IoC
                 .AddJsonFile("appsettings.json", true, true)
                 .Build();
         }
-
-        //private static void ApplyMigrations<TContext>() where TContext : DbContext
-        //{
-        //    using (var serviceScope = container.Resolve<IServiceScopeFactory>().CreateScope())
-        //    {
-        //        var context = serviceScope.ServiceProvider.GetRequiredService<TContext>();
-        //        context.Database.Migrate();
-        //    }
-        //}
     }
 }
