@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.28307.572
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrpcStreamer", "GrpcStreamer\GrpcStreamer.csproj", "{F54D6011-91DC-4FC9-A347-4CCF12B99F8A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrpcStreamer.Server", "GrpcStreamer.Server\GrpcStreamer.Server.csproj", "{2FE08D2F-2B0E-4DAF-8A2A-94F2D487CEFF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GrpcStreamer.Client", "GrpcStreamer.Client\GrpcStreamer.Client.csproj", "{1F6914E1-235C-4C75-97DC-D8FC8110DC4A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{F54D6011-91DC-4FC9-A347-4CCF12B99F8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F54D6011-91DC-4FC9-A347-4CCF12B99F8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F54D6011-91DC-4FC9-A347-4CCF12B99F8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FE08D2F-2B0E-4DAF-8A2A-94F2D487CEFF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FE08D2F-2B0E-4DAF-8A2A-94F2D487CEFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FE08D2F-2B0E-4DAF-8A2A-94F2D487CEFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FE08D2F-2B0E-4DAF-8A2A-94F2D487CEFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F6914E1-235C-4C75-97DC-D8FC8110DC4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F6914E1-235C-4C75-97DC-D8FC8110DC4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F6914E1-235C-4C75-97DC-D8FC8110DC4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F6914E1-235C-4C75-97DC-D8FC8110DC4A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
