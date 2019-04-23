@@ -12,7 +12,7 @@ namespace GrpcStreamer.Server.DataAccess
     public class ItemRepository : IItemRepository
     {
         private readonly IConnectionFactory connectionFactory;
-        private const string ListAllQueryFormat = "SELECT ItemId, [Value], StatusId FROM dbo.TItem WHERE StatusId = {0} ORDER BY ItemId OFFSET {1} ROWS FETCH NEXT {2} ROWS ONLY";
+        private const string ListAllQueryFormat = "SELECT ItemId, [Value], StatusId FROM dbo.TItem ORDER BY ItemId OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY";
 
         public ItemRepository(IConnectionFactory connectionFactory)
         {
@@ -21,7 +21,7 @@ namespace GrpcStreamer.Server.DataAccess
 
         public IEnumerable<Item> ListAll(int top, int skip)
         {
-            var command = new CommandDefinition(string.Format(ListAllQueryFormat, (int)ItemStatus.Created, skip, top));
+            var command = new CommandDefinition(string.Format(ListAllQueryFormat, skip, top));
 
             using (var connection = connectionFactory.Create())
             using (var reader = connection.ExecuteReader(command, CommandBehavior.SequentialAccess))

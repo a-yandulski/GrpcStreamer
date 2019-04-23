@@ -6,35 +6,35 @@ namespace GrpcStreamer.Server.Infrastructure.Mappers
 {
     public class ItemMapper : IItemMapper
     {
-        public Streamer.Item ToContract(Domain.Item item)
+        public Streamer.StreamerResponse ToContract(Domain.Item item)
         {
             if (item == null)
             {
                 throw new ArgumentNullException(nameof(item));
             }
 
-            return new Streamer.Item
+            return new Streamer.StreamerResponse
             {
                 Id = item.ItemId,
                 Value = item.Value
             };
         }
 
-        public Domain.ItemStatus ToDomain(Streamer.ItemStatus status)
+        public Domain.ItemStatus ToDomain(Streamer.StreamerRequest request)
         {
-            if (status == null)
+            if (request == null)
             {
-                throw new ArgumentNullException(nameof(status));
+                throw new ArgumentNullException(nameof(request));
             }
 
-            switch (status.Value)
+            switch (request.ItemStatus)
             {
                 case Status.Completed:
                     return ItemStatus.Completed;
                 case Status.Failed:
                     return ItemStatus.Failed;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(status), status, null);
+                    throw new ArgumentOutOfRangeException(nameof(request.ItemStatus), request.ItemStatus, null);
             }
         }
     }

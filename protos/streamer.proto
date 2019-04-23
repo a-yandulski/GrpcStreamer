@@ -14,29 +14,12 @@
 
 syntax = "proto3";
 
-//option java_multiple_files = true;
-//option java_package = "io.grpc.examples.helloworld";
-//option java_outer_classname = "HelloWorldProto";
-//option objc_class_prefix = "HLW";
-
 package streamer;
 
 // The streamer service definition.
 service Streamer {
   // Sends an item
   rpc Send (stream StreamerRequest) returns (stream StreamerResponse) {}
-}
-
-// The item to be processed
-message Item {
-  int32 id = 1;
-  string value = 2;
-}
-
-// The status of the item processed
-message ItemStatus {
-  int32 item_id = 1;
-  Status value = 2;
 }
 
 enum Status {
@@ -48,19 +31,13 @@ enum Status {
 // The request message
 message StreamerRequest
 {
-  StreamAction action = 1;
-  int32 position = 2;
-  ItemStatus payload = 3;
+  int32 item_id = 1;
+  Status item_status = 2;
 }
 
 // The response message
 message StreamerResponse {
-  Item payload = 1;
+  int32 id = 1;
+  string value = 2;
 } 
-
-enum StreamAction {
-  START = 0;
-  CONTINUE = 1;
-  STOP = 2;
-}
 

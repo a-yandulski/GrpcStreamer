@@ -1,37 +1,59 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
+using GrpcStreamer.Client.Helpers;
+using GrpcStreamer.Client.Infrastructure;
 using GrpcStreamer.Client.IoC;
+using Microsoft.Extensions.Logging;
 
 namespace GrpcStreamer.Client
 {
     class Program
     {
         private const int BatchSize = 5000;
-        private const int TotalCount = 1000000; //Assuming we know how many records we have to update
+        private static ILogger<Program> logger = Container.GetContainer().Resolve<ILogger<Program>>();
 
         static void Main(string[] args)
         {
             Console.WriteLine("GrpcStreamer.Client");
-            Console.WriteLine("Press any key to start processing.");
+            Console.WriteLine("Press any key to start processing...");
             Console.ReadKey();
 
-            using (var client = Container.GetContainer().Resolve<IStreamerClient>())
+            using (var tokenSource = new CancellationTokenSource())
             {
-                Console.WriteLine("GrpcStreamer.Client is running.");
-                Console.WriteLine($"Processing {TotalCount} record in batches by {BatchSize} records.");
+                Task.Run(async () => await Run(BatchSize, 0, tokenSource.Token), tokenSource.Token);
 
-                var total = 0;
+                Console.WriteLine("\nPress any key to exit...");
+                Console.ReadKey();
 
-                while (total < TotalCount)
-                {
-                    client.ProcessItems(BatchSize, total).Wait();
-
-                    total += BatchSize;
-                }
+                tokenSource.Cancel();
             }
+        }
 
-            Console.WriteLine("GrpcStreamer.Client has finished processing.");
-            Console.WriteLine("Press any key to exit...");
-            Console.ReadKey();
+        public static async Task Run(int top = 1000, int skip = 0, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var clientFactory = Container.GetContainer().Resolve<IClientFactory>();
+
+            // Retain count of processed items for correct retries.
+            var processedCount = new Ref<int>(skip);
+            var @continue = false;
+
+            Console.WriteLine("Processing records.");
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            using (var client = clientFactory.Create())
+            {
+                do
+                {
+                    // Process batch with retry
+                    @continue = await RetryHelper.WithRetryAsync(async () => await client.Process(top, processedCount, cancellationToken), 3, logger);
+
+                    Console.WriteLine("Completed processing a batch of records. Total count = {0}. Time (ms) = {1}.", processedCount.Value, stopwatch.ElapsedMilliseconds);
+
+                } while (@continue);
+            }
         }
     }
 }

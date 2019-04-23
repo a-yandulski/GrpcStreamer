@@ -2,8 +2,8 @@
 {
     public interface IItemMapper
     {
-        Streamer.Item ToContract(Domain.Item item);
+        Streamer.StreamerResponse ToContract(Domain.Item item);
 
-        Domain.ItemStatus ToDomain(Streamer.ItemStatus status);
+        Domain.ItemStatus ToDomain(Streamer.StreamerRequest request);
     }
 }

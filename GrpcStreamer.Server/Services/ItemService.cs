@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 using GrpcStreamer.Server.DataAccess;
 using GrpcStreamer.Server.Domain;
@@ -27,7 +26,7 @@ namespace GrpcStreamer.Server.Services
             }
             catch (Exception e)
             {
-                logger.LogError(e, "An error occured");
+                logger.LogError(e, "An error occurred.");
                 throw;
             }
         }
@@ -40,7 +39,7 @@ namespace GrpcStreamer.Server.Services
             }
             catch (Exception e)
             {
-                logger.LogError(e, "An error occured");
+                logger.LogError(e, "An error occurred.");
                 throw;
             }
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using GrpcStreamer.Client.Infrastructure;
 using GrpcStreamer.Client.Infrastructure.Configuration;
 using GrpcStreamer.Server.IoC;
 using Microsoft.Extensions.Configuration;
@@ -43,10 +44,9 @@ namespace GrpcStreamer.Client.IoC
 
         private static void RegisterServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddLogging(configure => configure.AddConsole());
-
+            services.AddLogging(configure => configure.AddConsole().SetMinimumLevel(LogLevel.Debug));
             services.Configure<StreamerOptions>(configuration);
-            services.AddTransient<IStreamerClient, StreamerClient>();
+            services.AddSingleton<IClientFactory, ClientFactory>();
         }
 
         private static IConfiguration GetConfiguration()

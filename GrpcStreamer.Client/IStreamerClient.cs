@@ -1,10 +1,11 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GrpcStreamer.Client
 {
     public interface IStreamerClient : IDisposable
     {
-        Task ProcessItems(int top = 1000, int skip = 0);
+        Task<bool> Process(int top, Ref<int> processedCount, CancellationToken cancellationToken = default(CancellationToken));
     }
 }

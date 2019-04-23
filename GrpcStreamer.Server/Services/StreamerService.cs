@@ -5,7 +5,6 @@ using Grpc.Core;
 using GrpcStreamer.Server.Infrastructure.Mappers;
 using Microsoft.Extensions.Logging;
 using Streamer;
-using ItemStatus = GrpcStreamer.Server.Domain.ItemStatus;
 using StreamerBase = Streamer.Streamer.StreamerBase;
 
 namespace GrpcStreamer.Server.Services
@@ -39,10 +38,9 @@ namespace GrpcStreamer.Server.Services
             {
                 logger.LogInformation("Sending item: Id={0}, Value={1}, StatusId={2}", item.ItemId, item.Value, item.StatusId);
 
-                await responseStream.WriteAsync(new StreamerResponse
-                {
-                    Payload = mapper.ToContract(item)
-                });
+                var response = mapper.ToContract(item);
+
+                await responseStream.WriteAsync(response);
 
                 // Wait for response
                 if (!await requestStream.MoveNext(context.CancellationToken))
@@ -50,12 +48,12 @@ namespace GrpcStreamer.Server.Services
                     return;
                 }
 
-                var itemStatus = requestStream.Current.Payload;
+                var request = requestStream.Current;
 
-                logger.LogInformation("Received processing status: ItemId={0}, Status={1}", itemStatus.ItemId, itemStatus.Value.ToString());
+                logger.LogInformation("Received processing status: ItemId={0}, Status={1}", request.ItemId, request.ItemStatus.ToString());
 
                 // Update the item and save changes
-                item.StatusId = (int)mapper.ToDomain(itemStatus);
+                item.StatusId = (int)mapper.ToDomain(request);
 
                 logger.LogInformation("Persisting item: Id={0}, Value={1}, StatusId={2}", item.ItemId, item.Value, item.StatusId);
 
